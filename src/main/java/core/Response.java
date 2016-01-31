@@ -19,10 +19,8 @@ public class Response {
 			responseText += "\r\n";
 			responseText += file;
 			
-			System.out.println(responseText);
 			writer.write(responseText);
 			writer.flush(); // flush很重要！
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

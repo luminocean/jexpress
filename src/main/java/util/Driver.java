@@ -11,11 +11,6 @@ public class Driver {
 			String file = FileSystem.readFile("hello.html");
 			res.send(file);
 		});
-		
-		app.get("/favicon.ico", (req, res) -> {
-			System.out.println("FAVICON!");
-			res.send("");
-		});
 		app.listen(8080);
 	}
 }
