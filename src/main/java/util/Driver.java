@@ -4,7 +4,6 @@ import core.App;
 import core.Express;
 
 public class Driver {
-
 	public static void main(String[] args) {
 		App app = Express.createApp();
 		app.get("/", (req, res) -> {
