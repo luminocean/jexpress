@@ -5,7 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import core.Server;
+
 public class FileSystem {
+	private static Logger logger = LoggerFactory.getLogger(FileSystem.class);
 
 	public static String readFile(String filePath) {
 		try {
@@ -17,11 +23,12 @@ public class FileSystem {
 			}
 			String result = builder.toString();
 			reader.close();
+			
 			return result;
 		}catch (FileNotFoundException e1) {
-			e1.printStackTrace();
+			logger.error(e1.getMessage());
 		}catch(IOException e2){
-			e2.printStackTrace();
+			logger.error(e2.getMessage());
 		}
 		
 		return "";

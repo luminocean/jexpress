@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Server{
-	private Logger logger = LoggerFactory.getLogger(Server.class);
+	private static Logger logger = LoggerFactory.getLogger(Server.class);
 	// 线程池
 	private ExecutorService threadPool = Executors.newCachedThreadPool();
 	// 路由表
