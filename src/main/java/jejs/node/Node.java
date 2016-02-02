@@ -12,7 +12,10 @@ import jejs.Token;
  *
  */
 public class Node {
+	// 每个node是识别符（仅测试用）
 	protected String id;
+	// 子节点的有序列表
+	public List<Node> children = new ArrayList<>();
 	
 	public Node(){
 		this(new Token(""));
@@ -21,11 +24,17 @@ public class Node {
 		id = token.raw;
 	}
 	
-	// 子节点的有序列表
-	public List<Node> children = new ArrayList<>();
-	
-	public String render(Map<String, Object> data) {
-		return null;
+	/**
+	 * 使用context数据来渲染本节点
+	 * @param context
+	 * @return 渲染后的html字符串
+	 */
+	public String render(Map<String, Object> context) {
+		StringBuilder builder = new StringBuilder();
+		for(Node child: children){
+			builder.append(child.render(context));
+		}
+		return builder.toString();
 	}
 	
 	@Override
