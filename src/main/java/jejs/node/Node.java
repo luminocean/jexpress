@@ -12,8 +12,10 @@ import jejs.Token;
  *
  */
 public class Node {
-	// 每个node是识别符（仅测试用）
-	protected String id;
+	// 每个node的原始字符串
+	protected String raw;
+	// 实际的文本内容
+	protected String text;
 	// 子节点的有序列表
 	public List<Node> children = new ArrayList<>();
 	
@@ -21,7 +23,8 @@ public class Node {
 		this(new Token(""));
 	}
 	public Node(Token token){
-		id = token.raw;
+		raw = token.raw;
+		text = token.value;
 	}
 	
 	/**
@@ -39,7 +42,7 @@ public class Node {
 	
 	@Override
 	public String toString(){
-		if(children.size() == 0) return id;
+		if(children.size() == 0) return raw;
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
@@ -50,6 +53,6 @@ public class Node {
 		builder.deleteCharAt(builder.length()-1);
 		builder.append("]");
 		
-		return id + "-" + builder.toString();
+		return raw + "-" + builder.toString();
 	}
 }

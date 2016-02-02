@@ -7,7 +7,7 @@ package jejs;
  */
 public class Token {
 	public enum TOKEN_TYPE{
-		EXPR, BLOCK_START, BLOCK_END, TEXT
+		EXPR, FOR_BLOCK_START, BLOCK_END, TEXT
 	}
 	public TOKEN_TYPE type;
 	
@@ -33,8 +33,10 @@ public class Token {
 			// block token有两种
 			if(value.equals("end")){
 				type = TOKEN_TYPE.BLOCK_END;
+			}else if(value.startsWith("for")){
+				type = TOKEN_TYPE.FOR_BLOCK_START;
 			}else{
-				type = TOKEN_TYPE.BLOCK_START;
+				assert false;
 			}
 		}
 		// 普通文本token

@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import jejs.node.BlockNode;
 import jejs.node.ExprNode;
+import jejs.node.ForNode;
 import jejs.node.Node;
 import jejs.node.TextNode;
 
@@ -39,10 +40,9 @@ public class Template {
 				scope.children.add(node);
 			}
 			// 块开始
-			else if(token.type == Token.TOKEN_TYPE.BLOCK_START){
-				BlockNode node = new BlockNode(token);
+			else if(token.type == Token.TOKEN_TYPE.FOR_BLOCK_START){
+				Node node = new ForNode(token);
 				scope.children.add(node);
-				
 				scopeStack.push(node); // 块node本身会构成一个作用域，因此加入scope栈
 			}
 			// 块结束
