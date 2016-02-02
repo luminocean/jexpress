@@ -2,12 +2,22 @@ package core;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Map;
+
+import jejs.Template;
+import jejs.node.Node;
 
 public class Response {
 	private BufferedWriter writer;
 
 	public Response(BufferedWriter writer) {
 		this.writer = writer;
+	}
+	
+	public void render(String templateText, Map<String, Object> context){
+		Template template = new Template(templateText);
+		String rendered = template.compile().render(context);
+		send(rendered);
 	}
 
 	public void send(String file){	

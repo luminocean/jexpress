@@ -2,7 +2,6 @@ package jejs;
 
 import java.util.Stack;
 
-import jejs.node.BlockNode;
 import jejs.node.ExprNode;
 import jejs.node.ForNode;
 import jejs.node.Node;

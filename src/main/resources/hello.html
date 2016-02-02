@@ -2,9 +2,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Hello</title>
+<title>Greetings</title>
 </head>
 <body>
-<p>Have a nice day~~</p>
+<p>It seems like that you are using {{os}} of {{osversion}} under {{architecture}}.</p>
+<div>
+	<p>Have some food like:</p>
+	<ul>
+		<% for food in foods %>
+		<li>{{food}}</li>
+		<% end %>
+	</ul>
+</div>
+<p>And have a nice day~~</p>
 </body>
 </html>

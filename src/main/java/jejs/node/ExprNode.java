@@ -36,6 +36,9 @@ public class ExprNode extends Node{
 					@SuppressWarnings("unchecked")
 					Map<String, Object> item = (Map<String, Object>)obj;
 					obj = item.get(id);
+					if(obj == null){
+						logger.warn("找不到"+id+"对应的值");
+					}
 				}catch(Exception e){
 					logger.warn("渲染map类型不是<String,Object>");
 					return "";
@@ -49,6 +52,9 @@ public class ExprNode extends Node{
 					Field field = cls.getDeclaredField(id);
 					field.setAccessible(true);
 					obj = field.get(obj);
+					if(obj == null){
+						logger.warn("找不到"+id+"对应的值");
+					}
 				} catch (NoSuchFieldException e) {
 					logger.warn("渲染时找不到域"+id+":"+e.getMessage());
 					return "";
@@ -62,8 +68,8 @@ public class ExprNode extends Node{
 			}
 		}
 		
-		// 没有迭代，返回空字符串
-		if(obj == context) return "";
+		// 没有迭代或者迭代出来为空，返回空字符串
+		if(obj == context || obj == null) return "";
 		
 		return obj.toString();
 	}

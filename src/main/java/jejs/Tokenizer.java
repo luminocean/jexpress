@@ -16,7 +16,7 @@ public class Tokenizer implements Iterable<Token>{
 	private final static String EXPR_CLOSE = "\\}\\}";
 	private final static String BLOCK_OPEN = "<%";
 	private final static String BLOCK_CLOSE = "%>";
-	private final static String TEXT = "[^{}<>%]+";
+	private final static String TEXT = "((?!<%)(?!\\{\\{)[\\s\\S])+"; // 拒绝<%或{{开头的任意文本
 	
 	private List<String> tokenStrs = new ArrayList<>();
 	
