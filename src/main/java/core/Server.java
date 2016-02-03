@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -49,10 +50,10 @@ public class Server{
 	 */
 	private void handle(Socket socket){
 		try {
+			// TODO: 改为二进制读取，而不是文本的方式
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(socket.getInputStream()));
-			BufferedWriter writer = new BufferedWriter(
-					new OutputStreamWriter(socket.getOutputStream())); 
+			OutputStream out = socket.getOutputStream();
 			
 			StringBuilder builder = new StringBuilder();
 			String buf = null;
@@ -70,7 +71,7 @@ public class Server{
 					HttpHeader header = new HttpHeader(headerStr);
 					
 					// 对该请求进行正式的服务
-					serve(header, writer);
+					serve(header, out);
 					
 					// 重置缓冲
 					builder = new StringBuilder();
@@ -93,7 +94,7 @@ public class Server{
 	 * @param header 报文头对象
 	 * @param writer 
 	 */
-	private void serve(HttpHeader header, BufferedWriter writer) {
+	private void serve(HttpHeader header, OutputStream out) {
 		String path = header.path;
 		Handler handler = routeMap.get(path);
 		
@@ -104,7 +105,7 @@ public class Server{
 		
 		// 构造请求与响应对象
 		Request req = new Request(header);
-		Response res = new Response(writer);
+		Response res = new Response(out);
 		// 调用请求路径对应的handler处理
 		handler.handle(req, res);
 	}

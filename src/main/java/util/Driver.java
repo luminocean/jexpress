@@ -11,6 +11,10 @@ import core.Express;
 public class Driver {
 	public static void main(String[] args) {
 		App app = Express.createApp();
+		
+		// TODO
+		app.use("/static", Express.statics("public"));
+		
 		app.get("/", (req, res) -> {
 			// 页面渲染数据
 			Map<String, Object> context = getDisplayData();

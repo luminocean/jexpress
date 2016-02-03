@@ -1,17 +1,21 @@
 package core;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jejs.Template;
-import jejs.node.Node;
 
 public class Response {
-	private BufferedWriter writer;
+	private static final Logger logger = LoggerFactory.getLogger(Response.class);
+	private OutputStream out;
 
-	public Response(BufferedWriter writer) {
-		this.writer = writer;
+	public Response(OutputStream out) {
+		this.out = out;
 	}
 	
 	public void render(String templateText, Map<String, Object> context){
@@ -20,17 +24,37 @@ public class Response {
 		send(rendered);
 	}
 
-	public void send(String file){	
+	/**
+	 * 发送文本响应
+	 * @param file
+	 */
+	public void send(String file){
+		byte[] data;
+		try {
+			data = file.getBytes("utf-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e.getMessage());
+			return;
+		}
+		
+		send(data, "text/html");
+	}
+	
+	/**
+	 * 发送任意数据响应
+	 * @param data
+	 * @param mime
+	 */
+	public void send(byte[] data, String mime){
 		try {			
-			String responseText = "HTTP/1.1 200 OK\r\n";
-			responseText += "Connection: keep-alive\r\n";
-			responseText += "Content-type: text/html; charset=utf-8\r\n";
-			responseText += "Content-Length: "+file.getBytes().length+"\r\n";
-			responseText += "\r\n";
-			responseText += file;
-			
-			writer.write(responseText);
-			writer.flush(); // flush很重要！
+			String responseHead = "HTTP/1.1 200 OK\r\n";
+			responseHead += "Connection: keep-alive\r\n";
+			responseHead += String.format("Content-type: %s; charset=utf-8\r\n", mime);
+			responseHead += "Content-Length: "+data.length+"\r\n";
+			responseHead += "\r\n";
+			out.write(responseHead.getBytes("utf-8"));
+			out.write(data);
+			out.flush(); // flush很重要！
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
