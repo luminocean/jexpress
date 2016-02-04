@@ -6,5 +6,5 @@ package core;
  *
  */
 public interface Middleware {
-	public void handle(Request req, Response res, Middleware next);
+	public void handle(Request req, Response res);
 }

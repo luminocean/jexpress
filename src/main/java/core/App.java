@@ -1,30 +1,41 @@
 package core;
 
-import java.util.HashMap;
-import java.util.Map;
+import core.server.Server;
 
 public class App {
-	private Map<String, Handler> routeMap = new HashMap<>();
-	
+	private Chain chain = new Chain();
+	/**
+	 * 处理服务器解析而来的请求
+	 * @param req
+	 * @param res
+	 */
+	public void handle(Request req, Response res) {
+		String path = req.path;
+		chain.handle(path, req, res);
+	}
 	/**
 	 * 添加一个get请求的handler
 	 * @param path
 	 * @param handler
 	 */
 	public void get(String path, Handler handler) {
-		routeMap.put(path, handler);
+		chain.addHandler("GET", path, handler);
 	}
 	
 	/**
-	 * 为发送给执行基路径的请求处理中添加一个中间件
-	 * @param statics
+	 * 添加一个中间件
+	 * @param path
 	 * @param middleware 
 	 */
-	public void use(String basePath, Middleware middleware) {
-		// TODO Auto-generated method stub
+	public void use(String path, Middleware middleware) {
+		chain.addMiddleware(path, middleware);
 	}
 
+	/**
+	 * 开启服务器监听指定端口
+	 * @param port 要坚挺的端口号
+	 */
 	public void listen(int port) {
-		new Server(routeMap).listen(port);
+		new Server(this).listen(port);
 	}
 }

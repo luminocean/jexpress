@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import core.Server;
+import core.server.Server;
 
 public class FileSystem {
 	private static Logger logger = LoggerFactory.getLogger(FileSystem.class);

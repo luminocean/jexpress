@@ -1,29 +1,35 @@
-package core;
+package core.server;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import core.App;
+import core.Request;
+import core.Response;
+
+/**
+ * 服务器类
+ * @author luminocean
+ *
+ */
 public class Server{
-	private static Logger logger = LoggerFactory.getLogger(Server.class);
+	private final static Logger logger = LoggerFactory.getLogger(Server.class);
+	// 本Server从属的app对象
+	private App app;
 	// 线程池
 	private ExecutorService threadPool = Executors.newCachedThreadPool();
-	// 路由表
-	private Map<String, Handler> routeMap;
 	
-	public Server(Map<String, Handler> routeMap) {
-		this.routeMap = routeMap;
+	public Server(App app) {
+		this.app = app;
 	}
 
 	public void listen(int port) {		
@@ -68,7 +74,7 @@ public class Server{
 				// 读完了报文头
 				if(buf != null){
 					String headerStr = builder.toString();
-					HttpHeader header = new HttpHeader(headerStr);
+					Header header = new Header(headerStr);
 					
 					// 对该请求进行正式的服务
 					serve(header, out);
@@ -94,19 +100,12 @@ public class Server{
 	 * @param header 报文头对象
 	 * @param writer 
 	 */
-	private void serve(HttpHeader header, OutputStream out) {
-		String path = header.path;
-		Handler handler = routeMap.get(path);
-		
-		if(handler == null){
-			logger.warn("未定义hander的请求路径："+path);
-			return;
-		}
-		
+	private void serve(Header header, OutputStream out) {
 		// 构造请求与响应对象
 		Request req = new Request(header);
 		Response res = new Response(out);
-		// 调用请求路径对应的handler处理
-		handler.handle(req, res);
+		
+		// 回调app对象处理请求
+		app.handle(req, res);
 	}
 }
