@@ -21,14 +21,14 @@ public class Response {
 	public void render(String templateText, Map<String, Object> context){
 		Template template = new Template(templateText);
 		String rendered = template.compile().render(context);
-		send(rendered);
+		sendText(rendered);
 	}
 
 	/**
 	 * 发送文本响应
 	 * @param file
 	 */
-	public void send(String file){
+	public void sendText(String file){
 		byte[] data;
 		try {
 			data = file.getBytes("utf-8");

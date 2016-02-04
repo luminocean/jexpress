@@ -19,9 +19,16 @@ public class Driver {
 			// 页面渲染数据
 			Map<String, Object> context = getDisplayData();
 			// 渲染并发送页面
-			String file = FileSystem.readFile("hello.html");
+			String file = FileSystem.readTextFile("hello.html");
 			res.render(file, context);
 		});
+		
+		app.get("/umaru", (req, res) -> {
+			// 渲染并发送页面
+			byte[] data = FileSystem.readFile("umaru.jpg");
+			res.send(data, "image/jpeg");
+		});
+		
 		// 监听端口
 		app.listen(8080);
 	}

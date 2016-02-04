@@ -23,8 +23,8 @@ public class Express {
 		return new Middleware() {
 			@Override
 			public boolean handle(Request req, Response res) {
-				String file = FileSystem.readFile(dp + PathUtil.normalizeFilePath(req.pathBeyondCaptured));
-				res.send(file);
+				String file = FileSystem.readTextFile(dp + PathUtil.normalizeFilePath(req.pathBeyondCaptured));
+				res.sendText(file);
 				return false; // 停止继续往下传递
 			}
 		};
