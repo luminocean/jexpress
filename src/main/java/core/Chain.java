@@ -26,17 +26,19 @@ public class Chain {
 	 * @param res
 	 */
 	public void handle(String path, Request req, Response res) {
-		Node handlerNode = findNode(path, (passingNode) ->{
+		Node handlerNode = findNode(path, (passingNode) ->{			
 			List<Middleware> middlewares = passingNode.middlewares;
+			
+			// 调用路过node的各个中间件
+			boolean continues = true;
 			for(Middleware mw: middlewares){
-				mw.handle(req, res);
+				continues = mw.handle(req, res);
+				if(!continues) break;
 			}
+			return continues;
 		});
 		
-		if(handlerNode == null){
-			logger.error("无效路径");
-			return;
-		}
+		if(handlerNode == null) return;
 		
 		// 正式处理请求的handler
 		Handler handler = handlerNode.handlers.get(req.method);
@@ -104,12 +106,15 @@ public class Chain {
 			if(frag.trim().equals("")) continue;
 			
 			if(node.nexts.get(frag) == null){
-				// 找不到则返回空
+				logger.error("无效路径");
 				return null;
 			}else{
 				node = node.nexts.get(frag);
 			}
-			inspector.inspect(node);
+			
+			// 调用node的各个中间件
+			boolean continues = inspector.inspect(node);
+			if(!continues) return null;
 		}
 		
 		return node;
@@ -135,5 +140,10 @@ class Node{
 
 @FunctionalInterface
 interface NodeInspector{
-	public void inspect(Node node);
+	/**
+	 * 回调node
+	 * @param node
+	 * @return 终止处理返回false，否则返回true
+	 */
+	public boolean inspect(Node node);
 }
