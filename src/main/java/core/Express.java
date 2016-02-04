@@ -1,5 +1,8 @@
 package core;
 
+import util.FileSystem;
+import util.PathUtil;
+
 public class Express {
 	/**
 	 * 创建一个web app对象
@@ -11,10 +14,19 @@ public class Express {
 
 	/**
 	 * 添加一个服务静态资源的中间件
-	 * @param string 请求的资源路径
+	 * @param dirPath
 	 * @return
 	 */
-	public static Middleware statics(String path) {
-		return null;
+	public static Middleware statics(String dirPath) {
+		final String dp = PathUtil.normalizeDirPath(dirPath);
+		
+		return new Middleware() {
+			@Override
+			public boolean handle(Request req, Response res) {
+				String file = FileSystem.readFile(dp + PathUtil.normalizeFilePath(req.pathBeyondCaptured));
+				res.send(file);
+				return false; // 停止继续往下传递
+			}
+		};
 	}
 }

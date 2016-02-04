@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import util.PathUtil;
+
 /**
  * 带中间件功能的请求分发类
  * @author luminocean
@@ -21,12 +23,15 @@ public class Chain {
 	 * 链式处理请求
 	 * 路径上所有符合的中间件都要处理
 	 * 最后处理最后一个节点上的handler
-	 * @param path
+	 * @param path 请求的全路径
 	 * @param req
 	 * @param res
 	 */
 	public void handle(String path, Request req, Response res) {
-		Node handlerNode = findNode(path, (passingNode) ->{			
+		Node handlerNode = findNode(path, (passingNode) ->{		
+			String pathAfterCaptured = PathUtil.pathAfterCaptured(path, passingNode.watchPath);
+			req.pathBeyondCaptured = pathAfterCaptured;
+			
 			List<Middleware> middlewares = passingNode.middlewares;
 			
 			// 调用路过node的各个中间件
@@ -35,6 +40,7 @@ public class Chain {
 				continues = mw.handle(req, res);
 				if(!continues) break;
 			}
+			req.pathBeyondCaptured = null;
 			return continues;
 		});
 		
@@ -88,13 +94,15 @@ public class Chain {
 			}
 		}
 		
+		node.watchPath = path;
+		
 		return node;
 	}
 	
 	/**
 	 * 根据路径查找并返回对应的节点，包括路径上的中间节点
 	 * @param path
-	 * @return
+	 * @return 找到的节点，如果找不到或者中途被中间件拦截停则返回null
 	 */
 	private Node findNode(String path, NodeInspector inspector){		
 		// 找到传入的path对应的node
@@ -127,7 +135,8 @@ public class Chain {
  *
  */
 class Node{
-	public String fragment;
+	public String fragment; // 本节点负责的片段
+	public String watchPath; // 本节点负责监听的实际全路径
 	public Map<String, Node> nexts = new HashMap<>();
 	public List<Middleware> middlewares = new ArrayList<>();
 	public Map<String, Handler> handlers; // method -> handler

@@ -12,12 +12,12 @@ public class Driver {
 	public static void main(String[] args) {
 		App app = Express.createApp();
 	
-		// app.use("/static", Express.statics("public"));
-		
+		// 静态资源请求捕获
+		app.use("/static", Express.statics("public"));
+		// 动态请求
 		app.get("/", (req, res) -> {
 			// 页面渲染数据
 			Map<String, Object> context = getDisplayData();
-			
 			// 渲染并发送页面
 			String file = FileSystem.readFile("hello.html");
 			res.render(file, context);
