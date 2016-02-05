@@ -18,8 +18,8 @@ public class Driver {
 			// 页面渲染数据
 			Map<String, Object> context = getDisplayData();
 			// 渲染并发送页面
-			String file = FileSystem.readTextFile("hello.html");
-			res.render(file, context);
+			String template = FileSystem.readTextFile("hello.html");
+			res.render(template, context);
 		});
 		// 监听端口
 		app.listen(8080);
