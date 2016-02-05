@@ -7,12 +7,12 @@ package jejs;
  */
 public class Token {
 	public enum TOKEN_TYPE{
-		EXPR, FOR_BLOCK_START, BLOCK_END, TEXT
+		EXPR, FOR_BLOCK_START, IF_BLOCK_START, BLOCK_END, TEXT
 	}
 	public TOKEN_TYPE type;
 	
-	public String raw;
-	public String trimed;
+	public String raw; // 正则匹配出来的原始字符串
+	public String trimed; // trim以后的字符串
 	public String value;
 	
 	public Token(String str) {
@@ -35,6 +35,8 @@ public class Token {
 				type = TOKEN_TYPE.BLOCK_END;
 			}else if(value.startsWith("for")){
 				type = TOKEN_TYPE.FOR_BLOCK_START;
+			}else if(value.startsWith("if")){
+				type = TOKEN_TYPE.IF_BLOCK_START;
 			}else{
 				assert false;
 			}
