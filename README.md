@@ -37,6 +37,8 @@ public class Driver {
 
 直接执行`src/main/java/core/driver/Driver.java`访问`localhost:8080`即可查看测试页面
 
+或者在项目根目录下执行`mvn clean compile assembly:single`将项目打包成jar包后直接运行
+
 ### 2. 静态资源捕获
 
 静态资源捕获的用处在于可以在某一段url和具体一个静态文件目录之间建立映射关系。

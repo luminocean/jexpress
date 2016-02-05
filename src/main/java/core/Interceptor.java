@@ -1,5 +1,10 @@
 package core;
 
+/**
+ * 拦截器接口
+ * @author luminocean
+ *
+ */
 @FunctionalInterface
 public interface Interceptor {
 	/**

@@ -35,7 +35,7 @@ public class Server{
 	public void listen(int port) {		
 		// 开进程执行服务器主循环
 		threadPool.execute(()->{
-			logger.info("服务器进程开启");
+			logger.info("服务器进程开启,监听端口" + port);
 			while(true){
 				try(ServerSocket ss = new ServerSocket(port)){
 					Socket socket = ss.accept();
