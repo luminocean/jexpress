@@ -12,8 +12,8 @@ jexpress是一个轻量级的web服务器，可以作为嵌入式http服务器�
 ### 1. 基本使用
 
 基本使用方式类似于Express.js：
+
 ```java
-// src/main/java/util/Driver.java
 public class Driver {
 	public static void main(String[] args) {
 		App app = Express.createApp();
@@ -34,6 +34,8 @@ public class Driver {
 	// getDisplayData等工具方法...
 }
 ```
+
+直接执行`src/main/java/core/driver/Driver.java`访问`localhost:8080`即可查看测试页面
 
 ### 2. 静态资源捕获
 

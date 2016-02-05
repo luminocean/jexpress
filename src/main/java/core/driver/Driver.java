@@ -1,4 +1,4 @@
-package util;
+package core.driver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import core.App;
 import core.Express;
+import util.FileSystem;
 
 public class Driver {
 	public static void main(String[] args) {
@@ -23,7 +24,7 @@ public class Driver {
 		});
 		
 		// 404处理
-		app.use("/", (req, res) -> {
+		app.use((req, res) -> {
 			String page404 = FileSystem.readTextFile("404.html");
 			res.sendText(page404);
 			return false; // 不再往下处理

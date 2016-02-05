@@ -30,6 +30,15 @@ public class App {
 	public void use(String path, Middleware middleware) {
 		chain.addMiddleware(path, middleware);
 	}
+	
+	/**
+	 * 添加一个默认中间件，对所有请求生效
+	 * @param path
+	 * @param middleware 
+	 */
+	public void use(Middleware middleware) {
+		chain.addMiddleware("/", middleware);
+	}
 
 	/**
 	 * 开启服务器监听指定端口
