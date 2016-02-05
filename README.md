@@ -51,13 +51,31 @@ app.use("/static", Express.statics("public"));
 ### jejs模板引擎
 
 目前内置实现的模板引擎支持以下语法：（可参考src/main/resources/hello.html）
-- 变量值取出：{{varible}}
-- for循环:
+
+#### 1. 变量值取出：
+```
+// varible = "foo"
+{{varible}}
+```
+生成结果：
+```
+foo
+```
+
+#### 2. for循环:
 ```html
+// items = ['apple', 'flag', 'dummy']
 <% for item in items %>
 	display:{{item}}
 <% end %>
 ```
+生成结果：
+```
+display:apple
+display:flag
+display:dummy
+```
+
 
 使用方式如下：
 ```java
