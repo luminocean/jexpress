@@ -5,7 +5,12 @@ package core;
  * @author luminocean
  *
  */
-@FunctionalInterface
-public interface Handler{
+public interface Handler extends Interceptor{
+	@Override
+	default boolean intercept(Request req, Response res) {
+		handle(req, res);
+		return false;
+	}
+
 	public void handle(Request req, Response res);
 }

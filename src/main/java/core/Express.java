@@ -23,7 +23,7 @@ public class Express {
 		
 		return new Middleware() {
 			@Override
-			public boolean handle(Request req, Response res) {
+			public boolean middleProcess(Request req, Response res) {
 				String fullPath = dir + PathUtil.normalizeFilePath(req.pathBeyondCaptured);
 				byte[] data = FileSystem.readFile(fullPath);
 				String mime = MimeUtil.mime(fullPath);

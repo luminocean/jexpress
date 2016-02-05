@@ -19,7 +19,7 @@ public class App {
 	 * @param handler
 	 */
 	public void get(String path, Handler handler) {
-		chain.addHandler(Method.GET, path, handler);
+		chain.addHandler(path, Method.GET, handler);
 	}
 	
 	/**

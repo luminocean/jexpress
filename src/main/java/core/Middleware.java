@@ -5,12 +5,11 @@ package core;
  * @author luminocean
  *
  */
-public interface Middleware {
-	/**
-	 * 中间件处理
-	 * @param req
-	 * @param res
-	 * @return 继续处理后面的中间件返回true，否则返回false
-	 */
-	public boolean handle(Request req, Response res);
+public interface Middleware extends Interceptor{
+	@Override
+	default boolean intercept(Request req, Response res) {
+		return middleProcess(req, res);
+	}
+
+	public boolean middleProcess(Request req, Response res);
 }

@@ -17,7 +17,7 @@ import util.PathUtil;
  */
 public class Chain {
 	private final static Logger logger = LoggerFactory.getLogger(Chain.class);
-	private Node root = new Node("/");
+	private List<Bundle> bundles = new ArrayList<Bundle>();
 	
 	/**
 	 * 链式处理请求
@@ -28,38 +28,41 @@ public class Chain {
 	 * @param res
 	 */
 	public void handle(String path, Request req, Response res) {
-		Node handlerNode = findNode(path, (passingNode) ->{		
-			String pathAfterCaptured = PathUtil.pathAfterCaptured(path, passingNode.watchPath);
-			req.pathBeyondCaptured = pathAfterCaptured;
+		List<Bundle> collected = collectInterceptors(path, req.method);
+		boolean continues = true;
+		for(Bundle bundle: collected){
+			Method method = bundle.method;
+			if(method != req.method && method != Method.ALL) 
+				continue; // method类型不符合的请求跳过
 			
-			List<Middleware> middlewares = passingNode.middlewares;
+			// 记录剩余路径
+			String watchedPath = bundle.watchPath;
+			req.pathBeyondCaptured = path.substring(watchedPath.length());
 			
-			// 调用路过node的各个中间件
-			boolean continues = true;
-			for(Middleware mw: middlewares){
-				continues = mw.handle(req, res);
-				if(!continues) break;
-			}
+			// 执行本拦截器
+			Interceptor interceptor = bundle.interceptor;
+			continues = interceptor.intercept(req, res);
+			
+			// 清空剩余路径
 			req.pathBeyondCaptured = null;
-			return continues;
-		});
+			// 拦截器终止继续处理
+			if(!continues) break;
+		}
 		
-		if(handlerNode == null) return;
-		
-		// 正式处理请求的handler
-		Handler handler = handlerNode.handlers.get(req.method);
-		handler.handle(req, res);
+		// 如果都处理结束但是continues还为真，说明这个请求没有人实际处理，警告
+		if(continues){
+			logger.warn("无效路径" + path);
+		}
 	}
-	
+
 	/**
 	 * 添加一个中间件
 	 * @param path
 	 * @param middleware
 	 */
 	public void addMiddleware(String path, Middleware middleware){
-		Node node = setupNode(path);		
-		// 为这个node添加一个中间件
-		node.middlewares.add(middleware);
+		Bundle bundle = new Bundle(path, Method.ALL, middleware);
+		bundles.add(bundle);
 	}
 	
 	/**
@@ -68,91 +71,44 @@ public class Chain {
 	 * @param path
 	 * @param handler
 	 */
-	public void addHandler(Method method, String path, Handler handler){
-		Node node = setupNode(path);	
-		node.handlers.put(method, handler);
+	public void addHandler(String path, Method method, Handler handler){
+		Bundle bundle = new Bundle(path, method, handler);
+		bundles.add(bundle);
 	}
 	
 	/**
-	 * 根据路径建立对应的节点，包括路径上的中间节点
+	 * 收集符合指定路径的所有interceptors
 	 * @param path
+	 * @param method
 	 * @return
 	 */
-	private Node setupNode(String path){		
-		// 找到传入的path对应的node
-		Node node = root;
-		String[] fragments = path.split("/");
-		for(String frag: fragments){
-			if(frag.trim().equals("")) continue;
-			
-			if(node.nexts.get(frag) == null){
-				Node newNode = new Node(frag);
-				node.nexts.put(frag, newNode);
-				node = newNode;
-			}else{
-				node = node.nexts.get(frag);
+	private List<Bundle> collectInterceptors(String path, Method method) {
+		List<Bundle> collected = new ArrayList<Bundle>();
+		for(Bundle bundle: bundles){
+			String watchedPath = bundle.watchPath;
+			if(path.startsWith(watchedPath)){
+				collected.add(bundle);
 			}
 		}
-		
-		node.watchPath = path;
-		
-		return node;
-	}
-	
-	/**
-	 * 根据路径查找并返回对应的节点，包括路径上的中间节点
-	 * @param path
-	 * @return 找到的节点，如果找不到或者中途被中间件拦截停则返回null
-	 */
-	private Node findNode(String path, NodeInspector inspector){		
-		// 找到传入的path对应的node
-		Node node = root;
-		inspector.inspect(node);
-		
-		String[] fragments = path.split("/");
-		for(String frag: fragments){
-			if(frag.trim().equals("")) continue;
-			
-			if(node.nexts.get(frag) == null){
-				logger.error("无效路径");
-				return null;
-			}else{
-				node = node.nexts.get(frag);
-			}
-			
-			// 调用node的各个中间件
-			boolean continues = inspector.inspect(node);
-			if(!continues) return null;
-		}
-		
-		return node;
+		return collected;
 	}
 }
 
 /**
- * 查找链的节点类
+ * 将拦截器和相关实用数据打包的类
  * @author luminocean
  *
  */
-class Node{
-	public String fragment; // 本节点负责的片段
-	public String watchPath; // 本节点负责监听的实际全路径
-	public Map<String, Node> nexts = new HashMap<>();
-	public List<Middleware> middlewares = new ArrayList<>();
-	public Map<Method, Handler> handlers; // method -> handler
+class Bundle{
+	public String watchPath; // 本拦截器正在监控的路径
+	public Method method;
+	public Interceptor interceptor;
 	
-	public Node(String fragment){
-		this.fragment = fragment;
-		this.handlers = new HashMap<Method, Handler>();
+	public Bundle(String watchPath, Method method, Interceptor interceptor){
+		this.watchPath = watchPath;
+		this.method = method;
+		this.interceptor = interceptor;
 	}
 }
 
-@FunctionalInterface
-interface NodeInspector{
-	/**
-	 * 回调node
-	 * @param node
-	 * @return 终止处理返回false，否则返回true
-	 */
-	public boolean inspect(Node node);
-}
+
