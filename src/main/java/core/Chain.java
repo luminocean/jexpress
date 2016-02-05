@@ -6,10 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sun.util.BuddhistCalendar;
-
 /**
- * 带中间件功能的请求分发类
+ * 链式请求分发类
  * @author luminocean
  *
  */
@@ -18,22 +16,23 @@ public class Chain {
 	private List<Bundle> bundles = new ArrayList<Bundle>();
 	
 	/**
-	 * 链式处理请求
-	 * 路径上所有符合的中间件都要处理
-	 * 最后处理最后一个节点上的handler
+	 * 链式地使用符合要求的拦截器处理请求
 	 * @param path 请求的全路径
 	 * @param req
 	 * @param res
 	 */
 	public void handle(String path, Request req, Response res) {
+		// 收集所有符合要求的拦截器
 		List<Bundle> collected = collectInterceptors(path, req.method);
+		
 		boolean continues = true;
 		for(Bundle bundle: collected){
+			// method类型不符合的请求跳过
 			Method method = bundle.method;
 			if(method != req.method && method != Method.ALL) 
-				continue; // method类型不符合的请求跳过
+				continue;
 			
-			// 记录剩余路径
+			// 记录剩余路径（处理请求时可能会用到）
 			String watchedPath = bundle.watchPath;
 			req.pathBeyondCaptured = path.substring(watchedPath.length());
 			
@@ -47,7 +46,7 @@ public class Chain {
 			if(!continues) break;
 		}
 		
-		// 如果都处理结束但是continues还为真，说明这个请求没有人实际处理，警告
+		// 如果都处理结束但是continues还为真，说明这个请求没有人实际处理，发出警告
 		if(continues){
 			logger.warn("无效路径" + path);
 		}

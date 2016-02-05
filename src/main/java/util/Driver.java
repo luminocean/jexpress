@@ -12,6 +12,7 @@ public class Driver {
 		App app = Express.createApp();
 		// 静态资源请求捕获
 		app.use("/static", Express.statics("public"));
+		
 		// 动态请求
 		app.get("/", (req, res) -> {
 			// 页面渲染数据
@@ -28,7 +29,7 @@ public class Driver {
 			return false; // 不再往下处理
 		});
 		
-		// 监听端口
+		// 启动服务器，监听端口
 		app.listen(8080);
 	}
 	
