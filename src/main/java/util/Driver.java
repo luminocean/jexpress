@@ -22,13 +22,6 @@ public class Driver {
 			String file = FileSystem.readTextFile("hello.html");
 			res.render(file, context);
 		});
-		
-		app.get("/umaru", (req, res) -> {
-			// 渲染并发送页面
-			byte[] data = FileSystem.readFile("umaru.jpg");
-			res.send(data, "image/jpeg");
-		});
-		
 		// 监听端口
 		app.listen(8080);
 	}

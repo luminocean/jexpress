@@ -1,6 +1,7 @@
 package core;
 
 import util.FileSystem;
+import util.MimeUtil;
 import util.PathUtil;
 
 public class Express {
@@ -18,13 +19,16 @@ public class Express {
 	 * @return
 	 */
 	public static Middleware statics(String dirPath) {
-		final String dp = PathUtil.normalizeDirPath(dirPath);
+		final String dir = PathUtil.normalizeDirPath(dirPath);
 		
 		return new Middleware() {
 			@Override
 			public boolean handle(Request req, Response res) {
-				String file = FileSystem.readTextFile(dp + PathUtil.normalizeFilePath(req.pathBeyondCaptured));
-				res.sendText(file);
+				String fullPath = dir + PathUtil.normalizeFilePath(req.pathBeyondCaptured);
+				byte[] data = FileSystem.readFile(fullPath);
+				String mime = MimeUtil.mime(fullPath);
+				res.send(data, mime);
+				
 				return false; // 停止继续往下传递
 			}
 		};
