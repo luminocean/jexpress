@@ -1,4 +1,4 @@
-package jexpress;
+package jejs;
 
 import static org.junit.Assert.*;
 
@@ -14,9 +14,9 @@ import jejs.Template;
 import jejs.node.Node;
 
 public class TestTemplate {
-	private Map<String, Object> data;
-	private Template t;
-	private Node n;
+	private static Map<String, Object> data;
+	private static Template t;
+	private static Node n;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -67,13 +67,23 @@ public class TestTemplate {
 	 */
 	@Test
 	public void testIf(){
-//		t = new Template("<% if superior %>super!<% end %>");
-//		n = t.compile();
-//		assertEquals("super!", n.render(data));
+		t = new Template("ha <% if superior %>super!<% end %> fo");
+		n = t.compile();
+		assertEquals("ha super! fo", n.render(data));
 		
-//		t = new Template("haha<% if lower %>lower!<% end %>foo");
-//		n = t.compile();
-//		assertEquals("hahafoo", n.render(data));
+		t = new Template("ha <% if !superior %>super!<% end %> fo");
+		n = t.compile();
+		assertEquals("ha  fo", n.render(data));
+		
+		t = new Template("haha<% if lower %>lower!<% end %>foo");
+		n = t.compile();
+		assertEquals("hahafoo", n.render(data));
+	}
+	
+	public static void main(String[] args){
+		t = new Template("<% if superior %>super!<% end %>");
+		n = t.compile();
+		System.out.println("super!".equals(n.render(data)));
 	}
 }
 

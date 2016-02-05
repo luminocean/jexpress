@@ -2,8 +2,12 @@ package jejs;
 
 import java.util.Stack;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jejs.node.ExprNode;
 import jejs.node.ForNode;
+import jejs.node.IfNode;
 import jejs.node.Node;
 import jejs.node.TextNode;
 
@@ -13,6 +17,7 @@ import jejs.node.TextNode;
  *
  */
 public class Template {
+	private static Logger logger = LoggerFactory.getLogger(Template.class);
 	private String templateText;
 	
 	public Template(String templateText){
@@ -38,9 +43,15 @@ public class Template {
 				ExprNode node = new ExprNode(token);
 				scope.children.add(node);
 			}
-			// 块开始
+			// for块开始
 			else if(token.type == Token.TOKEN_TYPE.FOR_BLOCK_START){
 				Node node = new ForNode(token);
+				scope.children.add(node);
+				scopeStack.push(node); // 块node本身会构成一个作用域，因此加入scope栈
+			}
+			// if块开始
+			else if(token.type == Token.TOKEN_TYPE.IF_BLOCK_START){
+				Node node = new IfNode(token);
 				scope.children.add(node);
 				scopeStack.push(node); // 块node本身会构成一个作用域，因此加入scope栈
 			}
@@ -55,7 +66,7 @@ public class Template {
 			}
 			// 错误
 			else{
-				assert false;
+				logger.error("解析到语法错误："+ token.raw);
 			}
 		}
 		return root;

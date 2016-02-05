@@ -18,7 +18,7 @@ public class Driver {
 			// 页面渲染数据
 			Map<String, Object> context = getDisplayData();
 			// 渲染并发送页面
-			String template = FileSystem.readTextFile("hello.html");
+			String template = FileSystem.readTextFile("index.html");
 			res.render(template, context);
 		});
 		
@@ -35,6 +35,7 @@ public class Driver {
 	
 	private static Map<String, Object> getDisplayData(){
 		Map<String, Object> data = new HashMap<>();
+		data.put("greetings", true);
 		data.put("osname", System.getProperty("os.name"));
 		data.put("architecture", System.getProperty("os.arch"));
 		data.put("osversion", System.getProperty("os.version"));

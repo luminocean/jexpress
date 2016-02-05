@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import jejs.Token;
 
 public class ForNode extends Node{
-	private Logger logger = LoggerFactory.getLogger(ForNode.class);
+	private static Logger logger = LoggerFactory.getLogger(ForNode.class);
 	// 要循环的目标对象
 	private Object collectionId;
 	private String iteratorId;

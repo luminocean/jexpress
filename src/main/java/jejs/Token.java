@@ -1,19 +1,23 @@
 package jejs;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 分词单元
  * @author luminocean
  *
  */
 public class Token {
-	public enum TOKEN_TYPE{
+	private static Logger logger = LoggerFactory.getLogger(Token.class);
+	public static enum TOKEN_TYPE{
 		EXPR, FOR_BLOCK_START, IF_BLOCK_START, BLOCK_END, TEXT
 	}
-	public TOKEN_TYPE type;
 	
+	public TOKEN_TYPE type;
 	public String raw; // 正则匹配出来的原始字符串
 	public String trimed; // trim以后的字符串
-	public String value;
+	public String value; // 去掉包裹符号并trim以后的字符串
 	
 	public Token(String str) {
 		this.raw = str;
@@ -38,7 +42,7 @@ public class Token {
 			}else if(value.startsWith("if")){
 				type = TOKEN_TYPE.IF_BLOCK_START;
 			}else{
-				assert false;
+				logger.error("未知block语法："+ value);
 			}
 		}
 		// 普通文本token

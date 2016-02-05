@@ -14,7 +14,7 @@ import jejs.Token;
  *
  */
 public class ExprNode extends Node{
-	private Logger logger = LoggerFactory.getLogger(ExprNode.class);
+	private static Logger logger = LoggerFactory.getLogger(ExprNode.class);
 	// 表达式字符串
 	private String[] idChain;
 
