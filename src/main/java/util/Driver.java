@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import core.App;
 import core.Express;
 
@@ -27,7 +26,7 @@ public class Driver {
 	
 	private static Map<String, Object> getDisplayData(){
 		Map<String, Object> data = new HashMap<>();
-		data.put("os", System.getProperty("os.name"));
+		data.put("osname", System.getProperty("os.name"));
 		data.put("architecture", System.getProperty("os.arch"));
 		data.put("osversion", System.getProperty("os.version"));
 		
