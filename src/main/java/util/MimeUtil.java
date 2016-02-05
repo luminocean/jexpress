@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sun.xml.internal.org.jvnet.mimepull.MIMEMessage;
-
 /**
  * mime类型查询工具
  * @author luminocean

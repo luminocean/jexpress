@@ -11,7 +11,6 @@ import core.Express;
 public class Driver {
 	public static void main(String[] args) {
 		App app = Express.createApp();
-	
 		// 静态资源请求捕获
 		app.use("/static", Express.statics("public"));
 		// 动态请求
@@ -33,9 +32,9 @@ public class Driver {
 		data.put("osversion", System.getProperty("os.version"));
 		
 		List<String> foods = new ArrayList<>();
-		foods.add("Sushi");
-		foods.add("Salmon");
-		foods.add("Spring Roll");
+		foods.add("Coke");
+		foods.add("Chips");
+		foods.add("Umaru");
 		data.put("foods", foods);
 		
 		return data;

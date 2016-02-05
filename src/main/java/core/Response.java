@@ -41,7 +41,7 @@ public class Response {
 	}
 	
 	/**
-	 * 发送任意数据响应
+	 * 发送二进制数据响应
 	 * @param data
 	 * @param mime
 	 */
@@ -50,7 +50,7 @@ public class Response {
 			String responseHead = "HTTP/1.1 200 OK\r\n";
 			responseHead += "Connection: keep-alive\r\n";
 			responseHead += String.format("Content-type: %s; charset=utf-8\r\n", mime);
-			responseHead += "Content-Length: "+data.length+"\r\n";
+			responseHead += String.format("Content-Length: %d\r\n", data.length);
 			responseHead += "\r\n";
 			out.write(responseHead.getBytes("utf-8"));
 			out.write(data);
