@@ -68,7 +68,7 @@ public class Chain {
 	 * @param path
 	 * @param handler
 	 */
-	public void addHandler(String method, String path, Handler handler){
+	public void addHandler(Method method, String path, Handler handler){
 		Node node = setupNode(path);	
 		node.handlers.put(method, handler);
 	}
@@ -139,11 +139,11 @@ class Node{
 	public String watchPath; // 本节点负责监听的实际全路径
 	public Map<String, Node> nexts = new HashMap<>();
 	public List<Middleware> middlewares = new ArrayList<>();
-	public Map<String, Handler> handlers; // method -> handler
+	public Map<Method, Handler> handlers; // method -> handler
 	
 	public Node(String fragment){
 		this.fragment = fragment;
-		this.handlers = new HashMap<String, Handler>();
+		this.handlers = new HashMap<Method, Handler>();
 	}
 }
 

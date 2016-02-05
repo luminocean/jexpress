@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Greetings</title>
+</head>
+<body>
+<p>It seems like that you are using {{osname}} of {{osversion}} under {{architecture}}.</p>
+<div>
+	<p>Have some food like:</p>
+	<ul>
+		<% for food in foods %>
+		<li>{{food}}</li>
+		<% end %>
+	</ul>
+</div>
+<div>
+	<img src="/static/umaru.jpg" />
+</div>
+<p>And have a nice day~~</p>
+</body>
+</html>
