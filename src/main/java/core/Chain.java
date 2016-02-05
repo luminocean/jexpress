@@ -1,14 +1,12 @@
 package core;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.PathUtil;
+import sun.util.BuddhistCalendar;
 
 /**
  * 带中间件功能的请求分发类
@@ -39,7 +37,7 @@ public class Chain {
 			String watchedPath = bundle.watchPath;
 			req.pathBeyondCaptured = path.substring(watchedPath.length());
 			
-			// 执行本拦截器
+			// 执行当前拦截器
 			Interceptor interceptor = bundle.interceptor;
 			continues = interceptor.intercept(req, res);
 			
@@ -84,12 +82,18 @@ public class Chain {
 	 */
 	private List<Bundle> collectInterceptors(String path, Method method) {
 		List<Bundle> collected = new ArrayList<Bundle>();
+		
 		for(Bundle bundle: bundles){
 			String watchedPath = bundle.watchPath;
+			// 前缀路径符合
 			if(path.startsWith(watchedPath)){
-				collected.add(bundle);
+				// 中途中间件或是路径完全匹配的handler，加入
+				if(bundle.interceptor instanceof Middleware || path.equals(bundle.watchPath)){
+					collected.add(bundle);
+				}
 			}
 		}
+		
 		return collected;
 	}
 }

@@ -20,6 +20,14 @@ public class Driver {
 			String template = FileSystem.readTextFile("hello.html");
 			res.render(template, context);
 		});
+		
+		// 404处理
+		app.use("/", (req, res) -> {
+			String page404 = FileSystem.readTextFile("404.html");
+			res.sendText(page404);
+			return false; // 不再往下处理
+		});
+		
 		// 监听端口
 		app.listen(8080);
 	}
