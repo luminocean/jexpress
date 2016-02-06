@@ -21,10 +21,7 @@ jexpress是一个轻量级的web服务器，使用Java实现，可以作为嵌�
 
 ### 1.3 嵌入使用
 
-如果要作为嵌入式服务器使用，只要将打包后的jar包加入你的项目classpath中，然后参考[示例驱动](src/main/java/core/driver/Driver.java)使用即可。
-
-
-**PS: 如果只是想看看效果，可以直接在项目中run上述实例驱动(内含main方法)，不必真的打包。**
+如果要作为嵌入式服务器使用，只要将打包后的jar包加入你的项目classpath中，然后参考[示例驱动](src/main/java/core/driver/Driver.java)使用即可。(PS: 直接执行该驱动也可以启动独立服务器)
 
 
 ## 2. 基本使用
