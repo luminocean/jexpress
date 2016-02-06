@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import core.App;
 import core.Express;
@@ -13,6 +12,7 @@ import util.FileSystem;
 public class Driver {
 	public static void main(String[] args) {
 		App app = Express.createApp();
+		
 		// 静态资源请求映射
 		app.use("/static", Express.statics("public"));
 		
@@ -20,6 +20,8 @@ public class Driver {
 		app.get("/", (req, res) -> {
 			// 页面渲染数据
 			Map<String, Object> context = getDisplayData();
+			context.putAll(req.params);
+			
 			// 渲染并发送页面
 			String template = FileSystem.readTextFile("jexpress.html");
 			res.render(template, context);

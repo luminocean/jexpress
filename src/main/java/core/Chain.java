@@ -2,7 +2,6 @@ package core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +35,7 @@ public class Chain {
 			// 记录剩余路径（处理请求时可能会用到）
 			Path watchedPath = bundle.watchPath;
 			req.pathBeyondCaptured = watchedPath.beyondCapturedStr(pathStr);
-			req.params = watchedPath.matchedParams(pathStr);
+			req.params.putAll(watchedPath.matchedParams(pathStr));
 			
 			// 执行当前拦截器
 			Interceptor interceptor = bundle.interceptor;
