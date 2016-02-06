@@ -48,7 +48,7 @@ public class Path {
 		}
 		
 		// 保证原字符串结尾有/替换后也有/，反之原字符串没有/替换后也没有/
-		if(!splitPaths[splitPaths.length-1].equals("/"))
+		if(splitPaths.length > 0 && !splitPaths[splitPaths.length-1].equals("/"))
 			regexStr = regexStr.substring(0, regexStr.length()-1);
 		
 		// 传进来的是""或"/"会导致regexStr为空，设置默认为/
@@ -78,5 +78,45 @@ public class Path {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 判断给定的路径字符串是否完全匹配
+	 * @param string
+	 * @return 匹配成功返回路径字符串中的各参数值，匹配失败返回null
+	 */
+	public Map<String, String> completeMatches(String path) {
+		// 匹配出来的键值对
+		Map<String, String> result = new HashMap<>();
+		
+		Matcher matcher = pattern.matcher(path);
+		if(!matcher.matches()) return null;
+		
+		int size = ids.size();
+		for(int i=0; i<size; i++){
+			String id = ids.get(i);
+			String value = matcher.group(i+1);
+			result.put(id, value);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 返回给定路径字符串匹配完剩下的字符串
+	 * 比如请求/user/info/resume 去匹配正则 /user/info 返回 resume
+	 * @param path
+	 * @return
+	 */
+	public String beyondCapturedStr(String path){
+		Matcher matcher = pattern.matcher(path);
+		if(!matcher.find())
+			return "";
+		
+		int ei = matcher.end();
+		if(ei == path.length())
+			return "";
+		
+		return path.substring(ei);
 	}
 }

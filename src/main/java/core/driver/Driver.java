@@ -21,7 +21,7 @@ public class Driver {
 			// 页面渲染数据
 			Map<String, Object> context = getDisplayData();
 			// 渲染并发送页面
-			String template = FileSystem.readTextFile("index.html");
+			String template = FileSystem.readTextFile("jexpress.html");
 			res.render(template, context);
 		});
 		

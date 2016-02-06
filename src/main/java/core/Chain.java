@@ -18,13 +18,13 @@ public class Chain {
 	
 	/**
 	 * 链式地使用符合要求的拦截器处理请求
-	 * @param path 请求的全路径
+	 * @param pathStr 请求的全路径
 	 * @param req
 	 * @param res
 	 */
-	public void handle(String path, Request req, Response res) {
+	public void handle(String pathStr, Request req, Response res) {
 		// 收集所有符合要求的拦截器
-		List<Bundle> collected = collectInterceptors(path, req.method);
+		List<Bundle> collected = collectInterceptors(pathStr, req.method);
 		
 		boolean continues = true;
 		for(Bundle bundle: collected){
@@ -33,10 +33,9 @@ public class Chain {
 			if(method != req.method && method != Method.ALL) 
 				continue;
 			
-			// TODO
 			// 记录剩余路径（处理请求时可能会用到）
-//			String watchedPath = bundle.watchPath;
-//			req.pathBeyondCaptured = path.substring(watchedPath.length());
+			Path watchedPath = bundle.watchPath;
+			req.pathBeyondCaptured = watchedPath.beyondCapturedStr(pathStr);
 			
 			// 执行当前拦截器
 			Interceptor interceptor = bundle.interceptor;
@@ -50,7 +49,7 @@ public class Chain {
 		
 		// 如果都处理结束但是continues还为真，说明这个请求没有人实际处理，发出警告
 		if(continues){
-			logger.warn("无效路径" + path);
+			logger.warn("无效路径" + pathStr);
 		}
 	}
 
@@ -81,20 +80,20 @@ public class Chain {
 	 * @param method
 	 * @return
 	 */
-	private List<Bundle> collectInterceptors(String path, Method method) {
+	private List<Bundle> collectInterceptors(String pathStr, Method method) {
 		List<Bundle> collected = new ArrayList<Bundle>();
 		
-		// TODO
-//		for(Bundle bundle: bundles){
-//			String watchedPath = bundle.watchPath;
-//			// 前缀路径符合
-//			if(path.startsWith(watchedPath)){
-//				// 中途中间件或是路径完全匹配的handler，加入
-//				if(bundle.interceptor instanceof Middleware || path.equals(bundle.watchPath)){
-//					collected.add(bundle);
-//				}
-//			}
-//		}
+		for(Bundle bundle: bundles){
+			Path path = bundle.watchPath;
+			// 前缀路径符合
+			if(path.matches(pathStr) != null){
+				// 中途中间件或是路径完全匹配的handler，加入
+				if(bundle.interceptor instanceof Middleware 
+						|| path.completeMatches(pathStr) != null){
+					collected.add(bundle);
+				}
+			}
+		}
 		
 		return collected;
 	}
