@@ -4,9 +4,9 @@ jexpress是一个轻量级的web服务器，使用Java实现，可以作为嵌�
 接口风格与[Express.js](http://expressjs.com)相似。
 
 支持功能:
+- 中间件支持
 - 实现了简单的模板引擎jejs（虽然完全没有参考ejs）
-- 静态文件中间件支持
-- 使用长连接
+- 静态资源捕获
 
 ## 1. 部署指南
 
@@ -20,7 +20,7 @@ jexpress是一个轻量级的web服务器，使用Java实现，可以作为嵌�
 
 ### 1.3 嵌入使用
 
-如果要作为嵌入式服务器使用，只要将打包后的jar包加入你的项目classpath中，然后参考[示例驱动](blob/master/src/main/java/core/driver/Driver.java)使用即可。
+如果要作为嵌入式服务器使用，只要将打包后的jar包加入你的项目classpath中，然后参考[示例驱动](src/main/java/core/driver/Driver.java)使用即可。
 
 
 ## 2. 基本使用
