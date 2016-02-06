@@ -39,7 +39,7 @@ public class Path {
 				ids.add(wrappingId.substring(1, wrappingId.length()-1));
 				
 				// 将占位符替换为对应的正则
-				String replacedId = "(.*?)";
+				String replacedId = "(.*)";
 				String replacedSplit = split.substring(0, si) + replacedId + split.substring(ei);
 				regexStr += (replacedSplit + "/");
 			}else{
@@ -59,11 +59,21 @@ public class Path {
 	}
 
 	/**
-	 * 判断给定的路径字符串是否匹配
+	 * 判断给定的路径字符串是否部分匹配
+	 * @param string
+	 * @return 
+	 */
+	public boolean matches(String path) {		
+		Matcher matcher = pattern.matcher(path);
+		return matcher.find();
+	}
+	
+	/**
+	 * 返回使用给定的路径字符串部分匹配出来的键值对
 	 * @param string
 	 * @return 匹配成功返回路径字符串中的各参数值，匹配失败返回null
 	 */
-	public Map<String, String> matches(String path) {
+	public Map<String, String> matchedParams(String path) {
 		// 匹配出来的键值对
 		Map<String, String> result = new HashMap<>();
 		
@@ -83,9 +93,19 @@ public class Path {
 	/**
 	 * 判断给定的路径字符串是否完全匹配
 	 * @param string
+	 * @return
+	 */
+	public boolean completeMatches(String path) {
+		Matcher matcher = pattern.matcher(path);
+		return matcher.matches();
+	}
+	
+	/**
+	 * 返回使用给定的路径字符串匹配出来的键值对
+	 * @param string
 	 * @return 匹配成功返回路径字符串中的各参数值，匹配失败返回null
 	 */
-	public Map<String, String> completeMatches(String path) {
+	public Map<String, String> completeMatchedParams(String path) {
 		// 匹配出来的键值对
 		Map<String, String> result = new HashMap<>();
 		

@@ -43,7 +43,17 @@ public class IfNode extends Node{
 		String id = matcher.group(2);
 		boolean bool;
 		try{
-			bool = (boolean)context.get(id);
+			Object value = context.get(id);
+			// 空值认为是false
+			if(value == null){
+				bool = false;
+			}
+			// 非空且非布尔值认为是true
+			else if(!(value instanceof Boolean)){
+				bool = true;
+			}else{
+				bool = (boolean) value;
+			}
 		}catch(Exception e){
 			logger.warn(e.getMessage());
 			return "";

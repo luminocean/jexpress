@@ -36,6 +36,7 @@ public class Chain {
 			// 记录剩余路径（处理请求时可能会用到）
 			Path watchedPath = bundle.watchPath;
 			req.pathBeyondCaptured = watchedPath.beyondCapturedStr(pathStr);
+			req.params = watchedPath.matchedParams(pathStr);
 			
 			// 执行当前拦截器
 			Interceptor interceptor = bundle.interceptor;
@@ -86,10 +87,10 @@ public class Chain {
 		for(Bundle bundle: bundles){
 			Path path = bundle.watchPath;
 			// 前缀路径符合
-			if(path.matches(pathStr) != null){
+			if(path.matches(pathStr)){
 				// 中途中间件或是路径完全匹配的handler，加入
 				if(bundle.interceptor instanceof Middleware 
-						|| path.completeMatches(pathStr) != null){
+						|| path.completeMatches(pathStr)){
 					collected.add(bundle);
 				}
 			}

@@ -13,7 +13,7 @@ import util.FileSystem;
 public class Driver {
 	public static void main(String[] args) {
 		App app = Express.createApp();
-		// 静态资源请求捕获
+		// 静态资源请求映射
 		app.use("/static", Express.statics("public"));
 		
 		// 动态请求
@@ -26,11 +26,13 @@ public class Driver {
 		});
 		
 		// 带参数请求
-		app.get("/user/{id}", (req, res) -> {
+		app.get("/user/{name}", (req, res) -> {
 			// 页面渲染数据
 			Map<String, Object> context = getDisplayData();
+			context.put("name", req.params.get("name"));
+			
 			// 渲染并发送页面
-			String template = FileSystem.readTextFile("index.html");
+			String template = FileSystem.readTextFile("jexpress.html");
 			res.render(template, context);
 		});
 		

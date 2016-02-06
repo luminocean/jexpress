@@ -1,5 +1,7 @@
 package core;
 
+import java.util.Map;
+
 import core.server.Header;
 
 public class Request {
@@ -7,6 +9,7 @@ public class Request {
 	public Method method;
 	public String pathBeyondCaptured; // 请求以某一路径捕获后剩下的部分
 	public String matchedPath; // 匹配成功的部分
+	public Map<String, String> params; // url里面匹配取出的参数
 
 	public Request(Header header) {
 		this.path = header.path;

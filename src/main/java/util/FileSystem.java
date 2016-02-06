@@ -37,6 +37,11 @@ public class FileSystem {
 		try {
 			byte[] buf = new byte[1024];
 			InputStream is = ClassLoader.getSystemResourceAsStream(filePath);
+			if(is == null){
+				logger.warn("找不到文件" + filePath);
+				return new byte[0];
+			}
+				
 			int count = is.read(buf);
 			while( count > 0){
 				dest.writeIn(buf, count);
