@@ -18,7 +18,8 @@ public class App {
 	 * @param path
 	 * @param handler
 	 */
-	public void get(String path, Handler handler) {
+	public void get(String pathStr, Handler handler) {
+		Path path = new Path(pathStr);
 		chain.addHandler(path, Method.GET, handler);
 	}
 	
@@ -27,7 +28,8 @@ public class App {
 	 * @param path
 	 * @param middleware 
 	 */
-	public void use(String path, Middleware middleware) {
+	public void use(String pathStr, Middleware middleware) {
+		Path path = new Path(pathStr);
 		chain.addMiddleware(path, middleware);
 	}
 	
@@ -37,7 +39,8 @@ public class App {
 	 * @param middleware 
 	 */
 	public void use(Middleware middleware) {
-		chain.addMiddleware("/", middleware);
+		Path path = new Path("/");
+		chain.addMiddleware(path, middleware);
 	}
 
 	/**

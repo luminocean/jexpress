@@ -92,7 +92,7 @@ app.get("/user/info", (req, res) -> {
 
 ### 4.2 语法说明
 
-目前内置实现的模板引擎支持以下语法：（可参考src/main/resources/hello.html）
+目前内置实现的模板引擎支持以下语法：（可参考[示例页面](src/main/resources/hello.html)）
 
 #### 1. 变量值取出
 ```

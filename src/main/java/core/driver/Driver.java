@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+
 import core.App;
 import core.Express;
 import util.FileSystem;
@@ -16,6 +18,15 @@ public class Driver {
 		
 		// 动态请求
 		app.get("/", (req, res) -> {
+			// 页面渲染数据
+			Map<String, Object> context = getDisplayData();
+			// 渲染并发送页面
+			String template = FileSystem.readTextFile("index.html");
+			res.render(template, context);
+		});
+		
+		// 带参数请求
+		app.get("/user/{id}", (req, res) -> {
 			// 页面渲染数据
 			Map<String, Object> context = getDisplayData();
 			// 渲染并发送页面

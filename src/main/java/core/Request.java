@@ -3,9 +3,10 @@ package core;
 import core.server.Header;
 
 public class Request {
-	public String path;
+	public String path; // 客户端请求的路径
 	public Method method;
 	public String pathBeyondCaptured; // 请求以某一路径捕获后剩下的部分
+	public String matchedPath; // 匹配成功的部分
 
 	public Request(Header header) {
 		this.path = header.path;

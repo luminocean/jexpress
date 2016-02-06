@@ -1,5 +1,7 @@
 package util;
 
+import java.util.regex.Pattern;
+
 public class PathUtil {
 	/**
 	 * 标准化目录路径

@@ -2,6 +2,7 @@ package core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +33,10 @@ public class Chain {
 			if(method != req.method && method != Method.ALL) 
 				continue;
 			
+			// TODO
 			// 记录剩余路径（处理请求时可能会用到）
-			String watchedPath = bundle.watchPath;
-			req.pathBeyondCaptured = path.substring(watchedPath.length());
+//			String watchedPath = bundle.watchPath;
+//			req.pathBeyondCaptured = path.substring(watchedPath.length());
 			
 			// 执行当前拦截器
 			Interceptor interceptor = bundle.interceptor;
@@ -57,19 +59,19 @@ public class Chain {
 	 * @param path
 	 * @param middleware
 	 */
-	public void addMiddleware(String path, Middleware middleware){
-		Bundle bundle = new Bundle(path, Method.ALL, middleware);
+	public void addMiddleware(Path matcher, Middleware middleware){
+		Bundle bundle = new Bundle(matcher, Method.ALL, middleware);
 		bundles.add(bundle);
 	}
 	
 	/**
 	 * 添加一个handler
 	 * @param method
-	 * @param path
+	 * @param matcher
 	 * @param handler
 	 */
-	public void addHandler(String path, Method method, Handler handler){
-		Bundle bundle = new Bundle(path, method, handler);
+	public void addHandler(Path matcher, Method method, Handler handler){
+		Bundle bundle = new Bundle(matcher, method, handler);
 		bundles.add(bundle);
 	}
 	
@@ -82,16 +84,17 @@ public class Chain {
 	private List<Bundle> collectInterceptors(String path, Method method) {
 		List<Bundle> collected = new ArrayList<Bundle>();
 		
-		for(Bundle bundle: bundles){
-			String watchedPath = bundle.watchPath;
-			// 前缀路径符合
-			if(path.startsWith(watchedPath)){
-				// 中途中间件或是路径完全匹配的handler，加入
-				if(bundle.interceptor instanceof Middleware || path.equals(bundle.watchPath)){
-					collected.add(bundle);
-				}
-			}
-		}
+		// TODO
+//		for(Bundle bundle: bundles){
+//			String watchedPath = bundle.watchPath;
+//			// 前缀路径符合
+//			if(path.startsWith(watchedPath)){
+//				// 中途中间件或是路径完全匹配的handler，加入
+//				if(bundle.interceptor instanceof Middleware || path.equals(bundle.watchPath)){
+//					collected.add(bundle);
+//				}
+//			}
+//		}
 		
 		return collected;
 	}
@@ -103,11 +106,11 @@ public class Chain {
  *
  */
 class Bundle{
-	public String watchPath; // 本拦截器正在监控的路径
+	public Path watchPath; // 本拦截器正在监控的路径
 	public Method method;
 	public Interceptor interceptor;
 	
-	public Bundle(String watchPath, Method method, Interceptor interceptor){
+	public Bundle(Path watchPath, Method method, Interceptor interceptor){
 		this.watchPath = watchPath;
 		this.method = method;
 		this.interceptor = interceptor;
