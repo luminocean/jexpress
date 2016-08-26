@@ -6,8 +6,8 @@ The API design is similar to [Express.js](http://expressjs.com) and yes, this is
 
 Features:
 - url parameter capture
-- simple template engine jejs
-- support for middle ware
+- simple template engine - jejs
+- support for middleware
 - static resource mapping
 
 ## 1. Deployment Guide
@@ -17,12 +17,12 @@ Features:
 Install Maven first.
 Simply run `mvn clean compile assembly:single` under the project root and you can get the project jar file.
 
-### 1.2 Use in stand-alone mode
+### 1.2 Used in stand-alone mode
 
 If you want to see the demo site, just run `java -jar target/jexpress-x.x.x-SNAPSHOT-jar-with-dependencies.jar` to launch the server.
 Visit `localhost:8080` to see the demo page.
 
-### 1.3 Use in built-in mode
+### 1.3 Used in built-in mode
 
 If you want to use jexpress as a built-in server, just add the packaged jar file to your classpath.
 See [Demo Driver](src/main/java/core/driver/Driver.java) for a reference.
@@ -59,9 +59,9 @@ public class Driver {
 ```
 
 For simplicity, for now the built-in `FileSystem` class only supports read files that are relative to paths in classpath.
-So if you want to use the `FileSystem` class, please put the resource path in classpath. (or read the file manually by your self :P)
+So if you want to use the `FileSystem` class, please put the resource path in classpath. (or read the file manually by yourself :P)
 
-## 3. Static Resouce Mapping
+## 3. Static Resource Mapping
 
 Static resource mapping is used to establish a mapping between a `url` and an actuall `file path` on the server machine.
 
